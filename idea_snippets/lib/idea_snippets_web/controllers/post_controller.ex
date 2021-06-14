@@ -3,6 +3,9 @@ defmodule IdeaSnippetsWeb.PostController do
 
   alias IdeaSnippets.Codes
   alias IdeaSnippets.Codes.Post
+  alias IdeaSnippets.Comments
+  alias IdeaSnippets.Comments.Comment
+  alias IdeaSnippets.Repo
 
   def index(conn, _params) do
     posts = Codes.list_posts()
@@ -27,8 +30,11 @@ defmodule IdeaSnippetsWeb.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = Codes.get_post!(id)
-    render(conn, "show.html", post: post)
+    post = id
+    |> Codes.get_post!
+    |> Repo.preload([:comments])
+    changeset = Comment.changeset(%Comment{}, %{})
+    render(conn, "show.html", post: post, changeset: changeset)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -59,4 +65,22 @@ defmodule IdeaSnippetsWeb.PostController do
     |> put_flash(:info, "Post deleted successfully.")
     |> redirect(to: Routes.post_path(conn, :index))
   end
+
+  def add_comment(conn, %{"comment" => comment_params, "post_id" => post_id}) do
+    post =
+      post_id
+      |> Codes.get_post!()
+      |> Repo.preload([:comments])
+    case Codes.add_comment(post_id, comment_params) do
+      {:ok, _comment } ->
+        conn
+        |> put_flash(:info, "Comment added !")
+        |> redirect(to: Routes.post_path(conn, :show, post))
+      {:error, _error} ->
+        conn
+        |> put_flash(:error, "Comment not added ")
+        |> redirect(to: Routes.post_path(conn, :show, post))
+    end
+  end
+
 end

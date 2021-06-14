@@ -7,6 +7,7 @@ defmodule IdeaSnippets.Codes do
   alias IdeaSnippets.Repo
 
   alias IdeaSnippets.Codes.Post
+  alias IdeaSnippets.Comments
 
   @doc """
   Returns the list of posts.
@@ -100,5 +101,17 @@ defmodule IdeaSnippets.Codes do
   """
   def change_post(%Post{} = post, attrs \\ %{}) do
     Post.changeset(post, attrs)
+  end
+
+  def add_comment(post_id, comment_params) do
+    comment_params
+    |> Map.put("post_id", post_id)
+    |> Comments.create_comment()
+  end
+
+  def get_number_of_comments(post_id) do
+    post = get_post!(post_id)
+    |> Repo.preload([:comments])
+    Enum.count(post.comments)
   end
 end

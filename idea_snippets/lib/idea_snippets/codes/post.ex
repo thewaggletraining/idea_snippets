@@ -2,10 +2,13 @@ defmodule IdeaSnippets.Codes.Post do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias IdeaSnippets.Comments.Comment
+
   schema "posts" do
     field :code, :string
     field :description, :string
     field :title, :string
+    has_many(:comments, Comment)
 
     field :published, Ecto.Enum, values: [:draft, :public, :limited, :private]
 
