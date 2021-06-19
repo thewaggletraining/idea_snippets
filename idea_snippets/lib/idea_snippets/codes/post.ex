@@ -8,6 +8,7 @@ defmodule IdeaSnippets.Codes.Post do
     field :code, :string
     field :description, :string
     field :title, :string
+    field :user_id, :integer
     has_many(:comments, Comment)
 
     field :published, Ecto.Enum, values: [:draft, :public, :limited, :private]
@@ -18,7 +19,7 @@ defmodule IdeaSnippets.Codes.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:title, :description, :code, :published])
-    |> validate_required([:title, :description, :code, :published])
+    |> cast(attrs, [:title, :description, :code, :published, :user_id])
+    |> validate_required([:title, :description, :code, :published, :user_id])
   end
 end

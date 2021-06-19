@@ -21,9 +21,15 @@ defmodule IdeaSnippetsWeb.Router do
 
     get "/", PageController, :index
 
+  end
+
+  scope "/admin", IdeaSnippetsWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
     resources "/posts", PostController do
       post "/comment", PostController, :add_comment
     end
+    resources "/accounts", AccountController
   end
 
   # Other scopes may use custom stacks.

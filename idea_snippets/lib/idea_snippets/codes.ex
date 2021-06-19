@@ -2,7 +2,6 @@ defmodule IdeaSnippets.Codes do
   @moduledoc """
   The Codes context.
   """
-
   import Ecto.Query, warn: false
   alias IdeaSnippets.Repo
 
@@ -19,7 +18,18 @@ defmodule IdeaSnippets.Codes do
 
   """
   def list_posts do
-    Repo.all(Post)
+    [_draft, _public, _limited, private ]  = Ecto.Enum.values(Post, :published)
+    Post
+    |> where([p], p.published != ^private)
+#    |> where([p], p.published != :private) #同じ事
+    |> Repo.all
+  end
+
+  def list_posts(id) do
+    Post
+    |> where([p], p.user_id == ^id)
+    |> order_by([p], [desc: p.updated_at])
+    |> Repo.all
   end
 
   @doc """

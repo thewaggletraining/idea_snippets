@@ -22,6 +22,10 @@
     <%= @post.published %>
   </li>
 
+  <li>
+    <strong>User_id:</strong>
+    <%= @post.user_id %>
+  </li>
 
 </ul>
 
@@ -29,4 +33,4 @@
 <%= render "comments_form.html", post: @post, changeset: @changeset, action: Routes.post_post_path(@conn, :add_comment, @post) %>
 
 <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span>
-<span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.page_path(@conn, :index) %></span>

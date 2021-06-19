@@ -1,6 +1,6 @@
 <section class="phx-hero">
 <%= if @current_user do %>
-  <h1><%= gettext "Welcome to %{name}!", name: @current_user.email %></h1>
+  <h1><%= gettext "Welcome to %{name}!", name: @accounts[@current_user.id][:name] %></h1>
 <% else %>
   <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
 <% end %>

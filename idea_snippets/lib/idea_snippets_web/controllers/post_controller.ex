@@ -8,7 +8,11 @@ defmodule IdeaSnippetsWeb.PostController do
   alias IdeaSnippets.Repo
 
   def index(conn, _params) do
-    posts = Codes.list_posts()
+#    IO.puts("===================")
+#    IO.inspect(conn.assigns.current_user.id)
+#    IO.puts("===================")
+
+    posts = Codes.list_posts(conn.assigns.current_user.id)
     render(conn, "index.html", posts: posts)
   end
 
